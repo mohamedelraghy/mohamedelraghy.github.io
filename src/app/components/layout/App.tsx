@@ -3,6 +3,7 @@ import GlobalStyles from '@mui/material/GlobalStyles';
 import { ThemeProvider } from '@mui/material/styles';
 
 import { reducedMotionStyles, theme } from '@/app/theme';
+import { Experience } from '@/features/experience';
 import { Header } from '@/features/header';
 import { Hero } from '@/features/hero';
 import { Highlights } from '@/features/highlights';
@@ -18,6 +19,7 @@ export const App = () => {
                 <Header />
                 <Hero />
                 <Highlights />
+                <Experience />
                 <HomePage />
             </main>
         </ThemeProvider>
