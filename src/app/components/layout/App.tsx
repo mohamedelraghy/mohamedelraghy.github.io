@@ -3,6 +3,7 @@ import GlobalStyles from '@mui/material/GlobalStyles';
 import { ThemeProvider } from '@mui/material/styles';
 
 import { reducedMotionStyles, theme } from '@/app/theme';
+import { Header } from '@/features/header';
 import { HomePage } from '@/features/home';
 
 export const App = () => {
@@ -12,6 +13,7 @@ export const App = () => {
             <CssBaseline />
             <GlobalStyles styles={reducedMotionStyles} />
             <main>
+                <Header />
                 <HomePage />
             </main>
         </ThemeProvider>
