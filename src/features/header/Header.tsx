@@ -12,11 +12,20 @@ export const Header = () => {
     const [isMenuOpen, setIsMenuOpen] = useState(false);
     const { name, nav, sections } = profile;
 
-    // The section chosen from the drawer. While it is set, the drawer closes without MUI's
-    // focus restore (which would scroll back to the Menu button) and navigates once closed.
+    // The section chosen from the drawer. MUI restores focus to the Menu button as the drawer
+    // closes (that scrolls the page back to the button), so we only navigate after the exit
+    // transition has finished, when that focus restore is already done and cannot undo the scroll.
     const [pendingSectionId, setPendingSectionId] = useState<string | null>(null);
 
-    const closeMenu = () => setIsMenuOpen(false);
+    const openMenu = () => {
+        setPendingSectionId(null);
+        setIsMenuOpen(true);
+    };
+
+    const closeMenu = () => {
+        setPendingSectionId(null);
+        setIsMenuOpen(false);
+    };
 
     const chooseSection = (sectionId: string) => {
         setPendingSectionId(sectionId);
@@ -27,7 +36,12 @@ export const Header = () => {
         if (pendingSectionId === null) {
             return;
         }
-        window.location.hash = pendingSectionId;
+        const targetHash = `#${pendingSectionId}`;
+        if (window.location.hash !== targetHash) {
+            window.location.hash = targetHash;
+        }
+        // Always scroll: the hash may already match, which would not scroll by itself.
+        document.getElementById(pendingSectionId)?.scrollIntoView();
         setPendingSectionId(null);
     };
 
@@ -57,7 +71,7 @@ export const Header = () => {
                     ))}
                 </Box>
                 <ButtonBase
-                    onClick={() => setIsMenuOpen(true)}
+                    onClick={openMenu}
                     aria-expanded={isMenuOpen}
                     aria-controls={MENU_ID}
                     aria-haspopup="dialog"
@@ -83,7 +97,6 @@ export const Header = () => {
                 aria-label={nav.menuLabel}
                 open={isMenuOpen}
                 onClose={closeMenu}
-                disableRestoreFocus={pendingSectionId !== null}
                 slotProps={{
                     transition: { onExited: goToPendingSection },
                     paper: {
@@ -118,10 +131,14 @@ export const Header = () => {
                     sx={{ display: 'flex', flexDirection: 'column', alignItems: 'flex-start', gap: '20px', fontSize: '18px' }}
                 >
                     {nav.sectionIds.map((sectionId) => (
-                        <UnderlineLink key={sectionId} href={`#${sectionId}`} onClick={(event) => {
+                        <UnderlineLink
+                            key={sectionId}
+                            href={`#${sectionId}`}
+                            onClick={(event) => {
                                 event.preventDefault();
                                 chooseSection(sectionId);
-                            }}>
+                            }}
+                        >
                             {sections[sectionId].title}
                         </UnderlineLink>
                     ))}
