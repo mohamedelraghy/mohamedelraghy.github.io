@@ -5,6 +5,7 @@ import { ThemeProvider } from '@mui/material/styles';
 import { reducedMotionStyles, theme } from '@/app/theme';
 import { Header } from '@/features/header';
 import { Hero } from '@/features/hero';
+import { Highlights } from '@/features/highlights';
 import { HomePage } from '@/features/home';
 
 export const App = () => {
@@ -16,6 +17,7 @@ export const App = () => {
             <main>
                 <Header />
                 <Hero />
+                <Highlights />
                 <HomePage />
             </main>
         </ThemeProvider>
