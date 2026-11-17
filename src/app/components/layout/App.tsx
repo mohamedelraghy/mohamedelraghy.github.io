@@ -1,10 +1,19 @@
+import CssBaseline from '@mui/material/CssBaseline';
+import GlobalStyles from '@mui/material/GlobalStyles';
+import { ThemeProvider } from '@mui/material/styles';
+
+import { reducedMotionStyles, theme } from '@/app/theme';
 import { HomePage } from '@/features/home';
 
 export const App = () => {
 
     return (
-        <main>
-            <HomePage />
-        </main>
+        <ThemeProvider theme={theme}>
+            <CssBaseline />
+            <GlobalStyles styles={reducedMotionStyles} />
+            <main>
+                <HomePage />
+            </main>
+        </ThemeProvider>
     );
 };
