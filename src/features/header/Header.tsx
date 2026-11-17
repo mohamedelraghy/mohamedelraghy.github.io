@@ -12,7 +12,24 @@ export const Header = () => {
     const [isMenuOpen, setIsMenuOpen] = useState(false);
     const { name, nav, sections } = profile;
 
+    // The section chosen from the drawer. While it is set, the drawer closes without MUI's
+    // focus restore (which would scroll back to the Menu button) and navigates once closed.
+    const [pendingSectionId, setPendingSectionId] = useState<string | null>(null);
+
     const closeMenu = () => setIsMenuOpen(false);
+
+    const chooseSection = (sectionId: string) => {
+        setPendingSectionId(sectionId);
+        setIsMenuOpen(false);
+    };
+
+    const goToPendingSection = () => {
+        if (pendingSectionId === null) {
+            return;
+        }
+        window.location.hash = pendingSectionId;
+        setPendingSectionId(null);
+    };
 
     return (
         <Reveal
@@ -43,6 +60,7 @@ export const Header = () => {
                     onClick={() => setIsMenuOpen(true)}
                     aria-expanded={isMenuOpen}
                     aria-controls={MENU_ID}
+                    aria-haspopup="dialog"
                     sx={(theme) => ({
                         display: { xs: 'inline-flex', md: 'none' },
                         gap: '6px',
@@ -62,9 +80,12 @@ export const Header = () => {
             <Drawer
                 anchor="top"
                 id={MENU_ID}
+                aria-label={nav.menuLabel}
                 open={isMenuOpen}
                 onClose={closeMenu}
+                disableRestoreFocus={pendingSectionId !== null}
                 slotProps={{
+                    transition: { onExited: goToPendingSection },
                     paper: {
                         sx: (theme) => ({
                             backgroundColor: theme.palette.portfolio.background,
@@ -97,7 +118,10 @@ export const Header = () => {
                     sx={{ display: 'flex', flexDirection: 'column', alignItems: 'flex-start', gap: '20px', fontSize: '18px' }}
                 >
                     {nav.sectionIds.map((sectionId) => (
-                        <UnderlineLink key={sectionId} href={`#${sectionId}`} onClick={closeMenu}>
+                        <UnderlineLink key={sectionId} href={`#${sectionId}`} onClick={(event) => {
+                                event.preventDefault();
+                                chooseSection(sectionId);
+                            }}>
                             {sections[sectionId].title}
                         </UnderlineLink>
                     ))}

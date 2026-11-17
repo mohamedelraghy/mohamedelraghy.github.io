@@ -1,10 +1,10 @@
 import Box from '@mui/material/Box';
-import type { ReactNode } from 'react';
+import type { MouseEvent, ReactNode } from 'react';
 
 interface UnderlineLinkProps {
     href: string;
     children: ReactNode;
-    onClick?: () => void;
+    onClick?: (event: MouseEvent<HTMLAnchorElement>) => void;
     external?: boolean;
 }
 
