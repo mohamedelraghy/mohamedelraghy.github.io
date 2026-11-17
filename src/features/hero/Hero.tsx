@@ -12,7 +12,7 @@ export const Hero = () => {
     return (
         <>
             <Reveal delaySeconds={0.2}>
-                <Typography variant="h1" component="h1" sx={{ margin: 0 }}>
+                <Typography variant="h1" component="h1">
                     {headline.before}{' '}
                     <Box component="span" sx={visuallyHidden}>
                         {headline.rotatingWords.join(', ')}
@@ -68,7 +68,7 @@ export const Hero = () => {
                     {[name, title, stack.join(' & '), location].join(' · ')}
                 </Typography>
             </Reveal>
-            <DrawLine delaySeconds={0.5} />
+            <DrawLine delaySeconds={0.8} />
         </>
     );
 };
