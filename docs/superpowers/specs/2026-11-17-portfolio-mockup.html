@@ -1,0 +1,192 @@
+<!DOCTYPE html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<style>
+  :root { --bg:#fafaf9; --ink:#0c0a09; --muted:#78716c; --line:#e7e5e4; --tile:#ffffff; --accent:#059669; }
+  * { box-sizing:border-box; }
+  body { margin:0; background:#d6d3d1; font-family: system-ui,-apple-system,sans-serif; }
+
+  /* ---------- preview toolbar (not part of the site) ---------- */
+  .bar { position:sticky; top:0; z-index:10; background:#1c1917; color:#fafaf9; padding:10px 16px; display:flex; flex-wrap:wrap; gap:8px; align-items:center; font-size:13px; }
+  .bar button { background:transparent; color:#fafaf9; border:1px solid #57534e; border-radius:8px; padding:6px 10px; cursor:pointer; font-size:13px; }
+  .bar button.on { background:var(--accent); border-color:var(--accent); }
+  .bar .w { margin-left:auto; color:#a8a29e; }
+  .stage { padding:20px 0; display:flex; justify-content:center; }
+  .frame { width:100%; background:var(--bg); color:var(--ink); container-type:inline-size; transition: width .35s ease; box-shadow:0 10px 40px rgba(0,0,0,.18); border-radius:12px; overflow:hidden; }
+
+  /* ---------- the site ---------- */
+  .wrap { max-width:1040px; margin:0 auto; padding:28px 24px 80px; }
+
+  @keyframes up { from { opacity:0; transform:translateY(14px); } to { opacity:1; transform:none; } }
+  .up { opacity:0; animation: up .7s cubic-bezier(.2,.7,.2,1) forwards; }
+  .d1{animation-delay:.05s}.d2{animation-delay:.2s}.d3{animation-delay:.35s}.d4{animation-delay:.5s}.d5{animation-delay:.65s}.d6{animation-delay:.8s}.d7{animation-delay:.95s}
+
+  nav { display:flex; justify-content:space-between; align-items:center; font-size:14px; margin-bottom:56px; }
+  nav .links { display:flex; gap:22px; }
+  nav .menu { display:none; font-weight:600; border:1px solid var(--line); border-radius:999px; padding:6px 12px; background:var(--tile); }
+  .ulink { position:relative; font-weight:600; color:var(--ink); text-decoration:none; cursor:pointer; }
+  .ulink::after { content:''; position:absolute; left:0; bottom:-3px; height:2px; width:100%; background:var(--accent); transform:scaleX(0); transform-origin:left; transition:transform .3s; }
+  .ulink:hover::after { transform:scaleX(1); }
+
+  h1 { font-size: clamp(34px, 7cqi, 84px); font-weight:800; letter-spacing:-.035em; line-height:1.08; margin:0; }
+  .rot { display:inline-block; height:1.08em; overflow:hidden; vertical-align:bottom; }
+  .rot span { display:block; line-height:1.08em; color:var(--accent); animation: rotate 7.5s infinite; }
+  @keyframes rotate { 0%,22%{transform:translateY(0)} 33%,55%{transform:translateY(-1.08em)} 66%,88%{transform:translateY(-2.16em)} 100%{transform:translateY(0)} }
+  .sub { color:var(--muted); font-size:16px; line-height:1.5; margin:18px 0 0; }
+  .drawline { height:2px; background:var(--ink); width:0; animation: grow 1.1s .8s ease forwards; margin:40px 0; }
+  @keyframes grow { to { width:100%; } }
+
+  .label { font-size:12px; letter-spacing:.12em; text-transform:uppercase; color:var(--muted); margin:0 0 14px; }
+  .bento { display:grid; grid-template-columns: repeat(4,1fr); grid-auto-rows: minmax(96px,auto); gap:12px; }
+  .tile { background:var(--tile); border:1px solid var(--line); border-radius:16px; padding:16px; transition: transform .25s, box-shadow .25s, border-color .25s; }
+  .tile small { display:block; font-size:12px; color:var(--muted); margin-bottom:6px; }
+  .tile strong { font-size:15px; }
+  .dark { background:var(--ink); color:var(--bg); border:none; }
+  .dark small { color:#a8a29e; }
+  .accent { background:var(--accent); color:#fff; border:none; cursor:pointer; }
+  .accent small { color:#d1fae5; }
+  .about { grid-column: span 2; grid-row: span 2; }
+  .about strong { font-size:18px; line-height:1.4; font-weight:600; }
+  .dot { display:inline-block; width:8px; height:8px; border-radius:50%; background:#16a34a; margin-right:8px; animation: ping 1.6s infinite; }
+  @keyframes ping { 0%{box-shadow:0 0 0 0 rgba(22,163,74,.55)} 100%{box-shadow:0 0 0 9px rgba(22,163,74,0)} }
+
+  .tl { position:relative; padding-left:28px; }
+  .tl::before { content:''; position:absolute; left:7px; top:6px; bottom:6px; width:2px; background:var(--line); }
+  .tl-fill { position:absolute; left:7px; top:6px; width:2px; height:0; background:var(--accent); animation: fill 1.8s 1s ease-out forwards; }
+  @keyframes fill { to { height: calc(100% - 12px); } }
+  .job { position:relative; margin-bottom:14px; }
+  .job::before { content:''; position:absolute; left:-27px; top:20px; width:12px; height:12px; border-radius:50%; background:var(--bg); border:2px solid var(--accent); }
+  .job .tile { display:grid; grid-template-columns: 150px 1fr; gap:16px; }
+  .job .when { font-size:13px; color:var(--muted); font-weight:600; }
+  .job h3 { margin:0; font-size:18px; letter-spacing:-.01em; }
+  .job .role { font-size:13px; color:var(--muted); margin:2px 0 8px; }
+  .job p { margin:0; font-size:14px; line-height:1.55; }
+  .chips { display:flex; flex-wrap:wrap; gap:6px; margin-top:10px; }
+  .chip { font-size:11px; border:1px solid var(--line); border-radius:999px; padding:3px 9px; color:#44403c; }
+  .now { font-size:11px; background:var(--accent); color:#fff; border-radius:999px; padding:2px 8px; margin-left:8px; vertical-align:middle; }
+
+  /* hover lift only on devices with a mouse (no sticky hover on phones) */
+  @media (hover:hover) {
+    .tile:hover { transform:translateY(-4px); box-shadow:0 12px 28px rgba(12,10,9,.07); border-color:#d6d3d1; }
+  }
+  /* people who turn animations off in their OS settings get a still page */
+  @media (prefers-reduced-motion: reduce) {
+    *, *::before, *::after { animation-duration:0s !important; animation-delay:0s !important; animation-iteration-count:1 !important; transition:none !important; }
+  }
+
+  /* ---------- breakpoints ---------- */
+  /* Big screens (1440px+): wider page, roomier spacing */
+  @container (min-width: 1440px) {
+    .wrap { max-width:1240px; padding:44px 40px 120px; }
+    nav { margin-bottom:88px; font-size:15px; }
+    .sub { font-size:18px; }
+    .bento { gap:16px; grid-auto-rows:minmax(120px,auto); }
+    .tile { padding:22px; }
+    .about strong { font-size:22px; }
+    .job .tile { grid-template-columns: 200px 1fr; }
+    .job p { font-size:15px; }
+  }
+  /* Tablets (600–1023px): tiles in 2 columns, About goes full width */
+  @container (max-width: 1023px) {
+    .bento { grid-template-columns: 1fr 1fr; }
+    .about { grid-column: span 2; grid-row: span 1; }
+    nav { margin-bottom:44px; }
+  }
+  /* Phones (under 600px): one column, menu button, stacked job cards */
+  @container (max-width: 599px) {
+    .wrap { padding:20px 16px 60px; }
+    nav { margin-bottom:36px; }
+    nav .links { display:none; }
+    nav .menu { display:inline-block; }
+    .sub { font-size:15px; }
+    .drawline { margin:28px 0; }
+    .bento { grid-template-columns: 1fr 1fr; gap:10px; grid-auto-rows:minmax(84px,auto); }
+    .about strong { font-size:16px; }
+    .tile { padding:14px; border-radius:14px; }
+    .tl { padding-left:22px; }
+    .tl::before, .tl-fill { left:5px; }
+    .job::before { left:-22px; }
+    .job .tile { grid-template-columns: 1fr; gap:4px; }
+  }
+  @container (max-width: 359px) {
+    .bento { grid-template-columns: 1fr; }
+    .about { grid-column: span 1; }
+  }
+</style></head>
+<body>
+
+<div class="bar">
+  <strong style="margin-right:6px">Preview size:</strong>
+  <button data-w="375">📱 Phone 375</button>
+  <button data-w="820">Tablet 820</button>
+  <button data-w="1280">💻 Laptop 1280</button>
+  <button data-w="1680">🖥 Big screen 1680</button>
+  <button data-w="fit" class="on">Fit window</button>
+  <button onclick="replay()">↻ Replay</button>
+  <span class="w" id="w"></span>
+</div>
+
+<div class="stage"><div class="frame" id="frame"><div class="wrap" id="site">
+
+<nav class="up d1">
+  <strong style="font-size:16px;letter-spacing:-.01em">Mohamed EL-Raghy</strong>
+  <div class="links"><a class="ulink">Experience</a><a class="ulink">Projects</a><a class="ulink">Contact</a></div>
+  <span class="menu">Menu ☰</span>
+</nav>
+
+<h1 class="up d2">I build <span class="rot"><span>secure<br>scalable<br>real-time</span></span><br>backend systems.</h1>
+<p class="sub up d3">Mohamed EL-Raghy · Senior Backend Engineer · Node.js &amp; NestJS · Egypt · Remote</p>
+
+<div class="drawline"></div>
+
+<div class="bento">
+  <div class="tile dark about up d3"><small>About</small>
+    <strong>Backend engineer for systems where reliability and security matter most: banking, government platforms and payments.</strong></div>
+  <div class="tile up d4"><small>Status</small><strong><span class="dot"></span>Open to work</strong></div>
+  <div class="tile accent up d4"><small>Résumé</small><strong style="font-size:19px">Download CV ↓</strong></div>
+  <div class="tile up d5"><small>Now at</small><strong>Burgan Bank</strong></div>
+  <div class="tile up d5"><small>Lately</small><strong>AI voice agents + MCP</strong></div>
+</div>
+
+<div class="drawline" style="animation-delay:1.1s"></div>
+
+<p class="label up d5">Experience</p>
+<div class="tl">
+  <div class="tl-fill"></div>
+  <div class="job up d5"><div class="tile">
+    <div class="when">Sep 2024 — Present</div>
+    <div><h3>Burgan Bank <span class="now">Now</span></h3><div class="role">Senior Full-Stack Engineer · Remote, Kuwait</div>
+    <p>Request encryption layer, centralized push notifications on Firebase, real-time transaction monitoring with WebSockets, and a NestJS bridge to SAP SuccessFactors.</p>
+    <div class="chips"><span class="chip">NestJS</span><span class="chip">TypeScript</span><span class="chip">WebSockets</span><span class="chip">Elasticsearch</span></div></div>
+  </div></div>
+  <div class="job up d6"><div class="tile">
+    <div class="when">Mar 2025 — Feb 2026</div>
+    <div><h3>ConnectX</h3><div class="role">AI Backend Engineer · Part-time</div>
+    <p>Medical intake voice agent with a custom MCP server as memory, so it recognizes returning patients. Follow-ups automated through n8n.</p>
+    <div class="chips"><span class="chip">Vapi AI</span><span class="chip">MCP</span><span class="chip">n8n</span></div></div>
+  </div></div>
+  <div class="job up d7"><div class="tile">
+    <div class="when">Jun 2023 — Sep 2024</div>
+    <div><h3>Pharaohsoft</h3><div class="role">Software Engineer · Cairo</div>
+    <p>Led the backend of the Shura Council CMS (Bahrain government) and built a NestJS restaurant platform with Stripe and Paymob payments.</p>
+    <div class="chips"><span class="chip">Node.js</span><span class="chip">MariaDB</span><span class="chip">MongoDB</span><span class="chip">Stripe</span></div></div>
+  </div></div>
+</div>
+
+</div></div></div>
+
+<script>
+  var frame = document.getElementById('frame'), wl = document.getElementById('w');
+  function show() { wl.textContent = 'site width: ' + Math.round(frame.getBoundingClientRect().width) + 'px'; }
+  document.querySelectorAll('.bar button[data-w]').forEach(function (b) {
+    b.addEventListener('click', function () {
+      document.querySelectorAll('.bar button[data-w]').forEach(function (x) { x.classList.remove('on'); });
+      b.classList.add('on');
+      frame.style.width = b.dataset.w === 'fit' ? '100%' : b.dataset.w + 'px';
+      frame.style.maxWidth = '100%';
+      setTimeout(show, 400); replay();
+    });
+  });
+  function replay() { var s = document.getElementById('site'); var c = s.cloneNode(true); s.parentNode.replaceChild(c, s); }
+  window.addEventListener('resize', show); show();
+</script>
+</body></html>
