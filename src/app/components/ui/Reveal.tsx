@@ -17,6 +17,7 @@ export const Reveal = ({ delaySeconds = 0, children, sx }: RevealProps) => {
     return (
         <Box
             ref={ref}
+            className="reveal"
             sx={[
                 inView
                     ? { animation: `${fadeUp} 0.7s ${EASE_OUT} ${delaySeconds}s both` }

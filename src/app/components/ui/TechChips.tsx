@@ -17,12 +17,15 @@ export const TechChips = ({ items }: TechChipsProps) => {
                     size="small"
                     sx={(theme) => ({
                         height: 'auto',
+                        maxWidth: '100%',
                         fontSize: '11px',
                         borderRadius: '999px',
                         borderColor: theme.palette.portfolio.line,
                         color: theme.palette.portfolio.chipText,
                         '& .MuiChip-label': {
-                            padding: '3px 9px'
+                            padding: '3px 9px',
+                            whiteSpace: 'normal',
+                            overflowWrap: 'anywhere'
                         }
                     })}
                 />

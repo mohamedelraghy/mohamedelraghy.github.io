@@ -16,14 +16,14 @@ export const JobCard = ({ job }: JobCardProps) => {
         <Tile
             sx={(theme) => ({
                 display: 'grid',
-                gridTemplateColumns: '1fr',
+                gridTemplateColumns: 'minmax(0, 1fr)',
                 gap: '4px',
                 [theme.breakpoints.up('md')]: {
-                    gridTemplateColumns: '150px 1fr',
+                    gridTemplateColumns: '150px minmax(0, 1fr)',
                     gap: '16px'
                 },
                 [theme.breakpoints.up('xl')]: {
-                    gridTemplateColumns: '200px 1fr'
+                    gridTemplateColumns: '200px minmax(0, 1fr)'
                 }
             })}
         >
@@ -37,7 +37,7 @@ export const JobCard = ({ job }: JobCardProps) => {
                 {job.start} — {job.end ?? labels.present}
             </Box>
             <Box>
-                <Box component="h3" sx={{ margin: 0, fontSize: '18px', letterSpacing: '-.01em' }}>
+                <Box component="h3" sx={{ margin: 0, fontSize: '18px', letterSpacing: '-.01em', overflowWrap: 'anywhere' }}>
                     {job.company}
                     {isCurrent && (
                         <Box
@@ -62,7 +62,8 @@ export const JobCard = ({ job }: JobCardProps) => {
                     sx={(theme) => ({
                         fontSize: '13px',
                         color: theme.palette.portfolio.muted,
-                        margin: '2px 0 8px'
+                        margin: '2px 0 8px',
+                        overflowWrap: 'anywhere'
                     })}
                 >
                     {job.role} · {job.location}
@@ -73,6 +74,7 @@ export const JobCard = ({ job }: JobCardProps) => {
                         margin: '0 0 10px',
                         fontSize: '14px',
                         lineHeight: 1.55,
+                        overflowWrap: 'anywhere',
                         [theme.breakpoints.up('xl')]: { fontSize: '15px' }
                     })}
                 >

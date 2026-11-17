@@ -64,7 +64,8 @@ export const Experience = () => {
                                 borderRadius: '50%',
                                 backgroundColor: theme.palette.portfolio.background,
                                 border: `2px solid ${theme.palette.portfolio.accent}`,
-                                [theme.breakpoints.up('md')]: { left: '-27px' }
+                                // Rail centre is 6px (xs) / 8px (md); the dot is 12px wide, so its left edge sits 6px before the centre.
+                                [theme.breakpoints.up('md')]: { left: '-26px' }
                             }
                         })}
                     >

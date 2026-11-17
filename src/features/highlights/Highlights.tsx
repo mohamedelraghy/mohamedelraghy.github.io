@@ -2,7 +2,7 @@ import Box from '@mui/material/Box';
 import type { SxProps, Theme } from '@mui/material/styles';
 import type { ReactNode } from 'react';
 
-import { DrawLine, Reveal, Tile } from '@/app/components';
+import { DrawLine, Reveal, Tile, tileGridGap } from '@/app/components';
 import { pulse } from '@/app/theme';
 import { profile } from '@/data';
 
@@ -79,19 +79,17 @@ export const Highlights = () => {
                 sx={(theme) => ({
                     display: 'grid',
                     gridTemplateColumns: {
-                        xs: '1fr',
-                        sm: 'repeat(2, 1fr)',
-                        md: 'repeat(2, 1fr)',
-                        lg: 'repeat(4, 1fr)'
+                        xs: 'minmax(0, 1fr)',
+                        sm: 'repeat(2, minmax(0, 1fr))',
+                        md: 'repeat(2, minmax(0, 1fr))',
+                        lg: 'repeat(4, minmax(0, 1fr))'
                     },
-                    gap: '10px',
+                    gap: tileGridGap,
                     gridAutoRows: 'minmax(84px, auto)',
                     [theme.breakpoints.up('md')]: {
-                        gap: '12px',
                         gridAutoRows: 'minmax(96px, auto)'
                     },
                     [theme.breakpoints.up('xl')]: {
-                        gap: '16px',
                         gridAutoRows: 'minmax(120px, auto)'
                     }
                 })}
@@ -112,6 +110,7 @@ export const Highlights = () => {
                                 fontSize: '16px',
                                 fontWeight: 600,
                                 lineHeight: 1.4,
+                                overflowWrap: 'anywhere',
                                 [theme.breakpoints.up('md')]: { fontSize: '18px' },
                                 [theme.breakpoints.up('xl')]: { fontSize: '22px' }
                             }

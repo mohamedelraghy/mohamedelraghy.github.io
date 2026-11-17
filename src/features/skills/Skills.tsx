@@ -1,6 +1,6 @@
 import Box from '@mui/material/Box';
 
-import { DrawLine, Reveal, SectionLabel, TechChips, Tile } from '@/app/components';
+import { DrawLine, Reveal, SectionLabel, TechChips, Tile, tileGridGap } from '@/app/components';
 import { STAGGER_SECONDS } from '@/app/theme';
 import { profile } from '@/data';
 
@@ -11,13 +11,15 @@ export const Skills = () => {
         <Box component="section" id={id}>
             <SectionLabel>{title}</SectionLabel>
             <Box
-                sx={(theme) => ({
+                sx={{
                     display: 'grid',
-                    gridTemplateColumns: { xs: '1fr', md: 'repeat(2, 1fr)', lg: 'repeat(3, 1fr)' },
-                    gap: '10px',
-                    [theme.breakpoints.up('md')]: { gap: '12px' },
-                    [theme.breakpoints.up('xl')]: { gap: '16px' }
-                })}
+                    gridTemplateColumns: {
+                        xs: 'minmax(0, 1fr)',
+                        md: 'repeat(2, minmax(0, 1fr))',
+                        lg: 'repeat(3, minmax(0, 1fr))'
+                    },
+                    gap: tileGridGap
+                }}
             >
                 {profile.skills.map((skillGroup, index) => (
                     <Reveal key={skillGroup.group} delaySeconds={(index % 3) * STAGGER_SECONDS}>

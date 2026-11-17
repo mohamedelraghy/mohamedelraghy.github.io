@@ -67,3 +67,22 @@ export const reducedMotionStyles = {
         }
     }
 };
+
+// Paper never scrolls, so nothing may stay hidden waiting for the scroll observer.
+export const printStyles = {
+    '@media print': {
+        '.reveal': {
+            opacity: '1 !important',
+            transform: 'none !important',
+            animation: 'none !important'
+        },
+        '.draw-line': {
+            width: '100% !important',
+            animation: 'none !important'
+        },
+        '.timeline-fill': {
+            height: 'calc(100% - 12px) !important',
+            animation: 'none !important'
+        }
+    }
+};

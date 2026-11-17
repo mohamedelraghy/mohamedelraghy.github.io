@@ -13,6 +13,7 @@ export const DrawLine = ({ delaySeconds = 0 }: DrawLineProps) => {
     return (
         <Box
             ref={ref}
+            className="draw-line"
             sx={(theme) => ({
                 height: '2px',
                 backgroundColor: theme.palette.portfolio.ink,
