@@ -28,7 +28,7 @@ export const profile: Profile = {
             text: 'Backend engineer for systems where reliability and security matter most: banking, government platforms and payments.',
         },
         status: { label: 'Status', text: 'Open to work', show: true },
-        cv: { label: 'Résumé', text: 'Download CV ↓' },
+        cv: { label: 'Résumé', text: 'Download CV' },
         nowAt: { label: 'Now at', text: 'Burgan Bank' },
         lately: { label: 'Lately', text: 'AI voice agents + MCP' },
     },

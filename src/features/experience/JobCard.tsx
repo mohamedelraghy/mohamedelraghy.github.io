@@ -38,7 +38,7 @@ export const JobCard = ({ job }: JobCardProps) => {
             </Box>
             <Box>
                 <Box component="h3" sx={{ margin: 0, fontSize: '18px', letterSpacing: '-.01em', overflowWrap: 'anywhere' }}>
-                    {job.company}
+                    {job.company}{' '}
                     {isCurrent && (
                         <Box
                             component="span"

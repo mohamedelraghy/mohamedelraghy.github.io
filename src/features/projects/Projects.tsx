@@ -9,8 +9,8 @@ export const Projects = () => {
     const { projects, labels } = profile;
 
     return (
-        <Box component="section" id={id}>
-            <SectionLabel>{title}</SectionLabel>
+        <Box component="section" id={id} aria-labelledby={`${id}-title`}>
+            <SectionLabel id={`${id}-title`}>{title}</SectionLabel>
             <Box
                 sx={{
                     display: 'grid',

@@ -51,55 +51,57 @@ export const Header = () => {
                 marginBottom: { xs: '36px', md: '44px', lg: '56px', xl: '88px' }
             }}
         >
-            <Box
-                component="nav"
-                sx={{
-                    display: 'flex',
-                    justifyContent: 'space-between',
-                    alignItems: 'center',
-                    fontSize: { xs: '14px', xl: '15px' }
-                }}
-            >
-                <Box component="strong" sx={{ fontSize: '16px', fontWeight: 700, letterSpacing: '-.01em' }}>
-                    {name}
-                </Box>
-                <Box sx={{ display: { xs: 'none', md: 'flex' }, gap: { md: '14px', lg: '22px' } }}>
-                    {nav.sectionIds.map((sectionId) => (
-                        <UnderlineLink key={sectionId} href={`#${sectionId}`}>
-                            {sections[sectionId].title}
-                        </UnderlineLink>
-                    ))}
-                </Box>
-                <ButtonBase
-                    onClick={openMenu}
-                    aria-expanded={isMenuOpen}
-                    aria-controls={MENU_ID}
-                    aria-haspopup="dialog"
-                    sx={(theme) => ({
-                        display: { xs: 'inline-flex', md: 'none' },
-                        gap: '6px',
-                        font: 'inherit',
-                        fontWeight: 600,
-                        color: theme.palette.portfolio.ink,
-                        border: `1px solid ${theme.palette.portfolio.line}`,
-                        borderRadius: '999px',
-                        padding: '6px 12px',
-                        backgroundColor: theme.palette.portfolio.tile
-                    })}
+            <Box component="header">
+                <Box
+                    component="nav"
+                    sx={{
+                        display: 'flex',
+                        justifyContent: 'space-between',
+                        alignItems: 'center',
+                        fontSize: { xs: '14px', xl: '15px' }
+                    }}
                 >
-                    {nav.menuLabel}
-                    <span aria-hidden="true">☰</span>
-                </ButtonBase>
+                    <Box component="strong" sx={{ fontSize: '16px', fontWeight: 700, letterSpacing: '-.01em' }}>
+                        {name}
+                    </Box>
+                    <Box sx={{ display: { xs: 'none', md: 'flex' }, gap: { md: '14px', lg: '22px' } }}>
+                        {nav.sectionIds.map((sectionId) => (
+                            <UnderlineLink key={sectionId} href={`#${sectionId}`}>
+                                {sections[sectionId].title}
+                            </UnderlineLink>
+                        ))}
+                    </Box>
+                    <ButtonBase
+                        onClick={openMenu}
+                        aria-expanded={isMenuOpen}
+                        aria-controls={MENU_ID}
+                        aria-haspopup="dialog"
+                        sx={(theme) => ({
+                            display: { xs: 'inline-flex', md: 'none' },
+                            gap: '6px',
+                            font: 'inherit',
+                            fontWeight: 600,
+                            color: theme.palette.portfolio.ink,
+                            border: `1px solid ${theme.palette.portfolio.line}`,
+                            borderRadius: '999px',
+                            padding: '6px 12px',
+                            backgroundColor: theme.palette.portfolio.tile
+                        })}
+                    >
+                        {nav.menuLabel}
+                        <span aria-hidden="true">☰</span>
+                    </ButtonBase>
+                </Box>
             </Box>
             <Drawer
                 anchor="top"
                 id={MENU_ID}
-                aria-label={nav.menuLabel}
                 open={isMenuOpen}
                 onClose={closeMenu}
                 slotProps={{
                     transition: { onExited: goToPendingSection },
                     paper: {
+                        'aria-label': nav.menuLabel,
                         sx: (theme) => ({
                             backgroundColor: theme.palette.portfolio.background,
                             backgroundImage: 'none',

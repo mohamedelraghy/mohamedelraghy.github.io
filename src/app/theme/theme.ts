@@ -60,7 +60,15 @@ export const theme = createTheme({
     shadows: Array(25).fill('none') as Shadows,
     components: {
         MuiButtonBase: {
-            defaultProps: { disableRipple: true }
+            defaultProps: { disableRipple: true },
+            styleOverrides: {
+                root: {
+                    '&:focus-visible': {
+                        outline: `2px solid ${portfolio.accent}`,
+                        outlineOffset: '3px'
+                    }
+                }
+            }
         },
         MuiCssBaseline: {
             styleOverrides: {

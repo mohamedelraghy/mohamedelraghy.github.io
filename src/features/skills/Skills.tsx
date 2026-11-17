@@ -8,8 +8,8 @@ export const Skills = () => {
     const { id, title } = profile.sections.skills;
 
     return (
-        <Box component="section" id={id}>
-            <SectionLabel>{title}</SectionLabel>
+        <Box component="section" id={id} aria-labelledby={`${id}-title`}>
+            <SectionLabel id={`${id}-title`}>{title}</SectionLabel>
             <Box
                 sx={{
                     display: 'grid',

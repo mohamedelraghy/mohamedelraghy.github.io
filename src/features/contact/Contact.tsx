@@ -9,9 +9,9 @@ export const Contact = () => {
 
     return (
         <Box component="footer">
-            <Box component="section" id={id}>
+            <Box component="section" id={id} aria-labelledby={`${id}-title`}>
                 <Reveal>
-                    <SectionLabel>{title}</SectionLabel>
+                    <SectionLabel id={`${id}-title`}>{title}</SectionLabel>
                     <Box
                         component="p"
                         sx={{ margin: '0 0 14px', fontSize: '15px', lineHeight: 1.55, overflowWrap: 'anywhere' }}
@@ -27,8 +27,9 @@ export const Contact = () => {
                                 {link.label}
                             </UnderlineLink>
                         ))}
-                        <UnderlineLink href={profile.cvHref} external>
+                        <UnderlineLink href={profile.cvHref} download>
                             {profile.highlights.cv.text}
+                            <span aria-hidden="true"> ↓</span>
                         </UnderlineLink>
                     </Box>
                 </Reveal>

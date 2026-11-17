@@ -6,14 +6,16 @@ interface UnderlineLinkProps {
     children: ReactNode;
     onClick?: (event: MouseEvent<HTMLAnchorElement>) => void;
     external?: boolean;
+    download?: boolean;
 }
 
-export const UnderlineLink = ({ href, children, onClick, external }: UnderlineLinkProps) => {
+export const UnderlineLink = ({ href, children, onClick, external, download }: UnderlineLinkProps) => {
 
     return (
         <Box
             component="a"
             href={href}
+            download={download}
             onClick={onClick}
             target={external ? '_blank' : undefined}
             rel={external ? 'noopener noreferrer' : undefined}

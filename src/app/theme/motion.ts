@@ -63,7 +63,7 @@ export const reducedMotionStyles = {
             transition: 'none !important'
         },
         html: {
-            scrollBehavior: 'auto'
+            scrollBehavior: 'auto !important'
         }
     }
 };

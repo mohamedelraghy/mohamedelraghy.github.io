@@ -53,7 +53,7 @@ export const Highlights = () => {
             variant: 'accent',
             href: profile.cvHref,
             download: true,
-            content: <Box component="strong" sx={{ fontSize: '19px', fontWeight: 800 }}>{cv.text}</Box>
+            content: <Box component="strong" sx={{ fontSize: '19px', fontWeight: 800 }}>{cv.text}<span aria-hidden="true"> ↓</span></Box>
         },
         {
             key: 'nowAt',
