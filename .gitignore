@@ -25,3 +25,6 @@ dist-ssr
 
 # brainstorming mockups
 .superpowers/
+
+# Claude worktrees
+.claude/worktrees/

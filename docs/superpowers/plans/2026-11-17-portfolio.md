@@ -15,6 +15,7 @@
 - **How each task runs (owner's decision, 2026-11-17, overrides the spec's teaching constraint):** this plan is executed subagent-driven, and the owner will learn React later on another project. **Skip every "Lesson" and "Walk through" step.** The "Lesson first" notes on each task only say which React idea the task uses. Implement, verify and commit.
 - **No hard-coded content in components.** Every visible string (headline, rotating words, tile labels, nav labels, section titles, badges like "Now", "Present", "Menu", the CV path) comes from `profile`. The only exception is `index.html` `<title>`/`<meta>`, which must be static so link-preview crawlers (LinkedIn etc.) see it.
 - **Keep the stack:** `@/` alias, `src/app/` for shell and shared pieces, `src/features/<name>/` for sections, `index.ts` barrel per folder, named exports, arrow-function components, 4-space indent, single quotes (match [main.tsx](../../../src/main.tsx)).
+- **No abbreviations (owner's rule):** branch names, commit messages and every name we choose (variables, props, types, files) use full words: `feature/…` not `feat/…`, commit prefix `feature:` not `feat:`, `delaySeconds` not `delayS`, `button` not `btn`. Names fixed by outside APIs or HTML (`sx`, `href`, `xs`/`md`/`lg` breakpoint keys, `rel`) and standard acronyms (CV, URL, CSS) stay as they are.
 - `react-refresh/only-export-components` is on, so hooks, theme and keyframes live in `.ts` files, and `.tsx` files export only components.
 - **Colors:** bg `#fafaf9`, ink `#0c0a09`, muted `#78716c`, line `#e7e5e4`, tile `#ffffff`, accent `#059669`, status dot `#16a34a`, light text on accent `#d1fae5`, dark tile small text `#a8a29e`, chip text `#44403c`, hover border `#d6d3d1`.
 - **Breakpoints (theme):** `xs: 0, sm: 360, md: 600, lg: 1024, xl: 1440`.
@@ -85,7 +86,7 @@ src/features/home/                          delete (replaced by sections)
 
 **Interfaces:**
 - Produces: `theme` (MUI `Theme`) with custom palette keys available as `theme.palette.portfolio.{bg, ink, muted, line, tile, accent, statusDot, onAccent, darkMuted, chipText, hoverLine}` (declare via module augmentation of `Palette`/`PaletteOptions`). `palette.primary.main = '#059669'`, `palette.background.default = '#fafaf9'`, `palette.text.primary = '#0c0a09'`, `palette.text.secondary = '#78716c'`. `shape.borderRadius = 16`.
-- Produces from `motion.ts`: `fadeUp`, `drawLine`, `rotateWord`, `pulse`, `fillDown` (Emotion `keyframes` from `@mui/material/styles`), `EASE_OUT = 'cubic-bezier(.2,.7,.2,1)'`, `STAGGER_S = 0.15`, and `reducedMotionStyles` (a `GlobalStyles` styles object).
+- Produces from `motion.ts`: `fadeUp`, `drawLine`, `rotateWord`, `pulse`, `fillDown` (Emotion `keyframes` from `@mui/material/styles`), `EASE_OUT = 'cubic-bezier(.2,.7,.2,1)'`, `STAGGER_SECONDS = 0.15`, and `reducedMotionStyles` (a `GlobalStyles` styles object).
 
 - [ ] **Step 1: Lesson** (see above), as a message to the owner.
 - [ ] **Step 2: Install** `npm install @mui/material @emotion/react @emotion/styled`. Expected: `@mui/material` `^9` in `dependencies`.
@@ -94,7 +95,7 @@ src/features/home/                          delete (replaced by sections)
 - [ ] **Step 5: Update `App.tsx`** to wrap `<HomePage />` in `ThemeProvider` + `CssBaseline` + `<GlobalStyles styles={reducedMotionStyles} />`. Delete `src/index.css` and remove its import from `main.tsx`.
 - [ ] **Step 6: Walk through** `theme.ts`, `motion.ts` and `App.tsx` with the owner.
 - [ ] **Step 7: Verify.** `npm run lint` shows 0 problems, and `npm run build` exits 0. `npm run dev` shows the existing name/title on a `#fafaf9` background in the system font. Tabbing to any focusable element shows a green outline (temporarily add a link if none exists, then remove it).
-- [ ] **Step 8: Commit** `git add -A && git commit -m "feat: add MUI theme, motion tokens and app shell"`
+- [ ] **Step 8: Commit** `git add -A && git commit -m "feature: add MUI theme, motion tokens and app shell"`
 
 ---
 
@@ -157,7 +158,7 @@ export type Profile = {
   - `contact.email: 'elraghy8@gmail.com'`. Links: GitHub, LinkedIn (URLs from CONTENT.md). No phone.
 - [ ] **Step 4: Walk through** both files.
 - [ ] **Step 5: Verify.** `npm run lint` and `npm run build` pass. Then temporarily delete `role` from one job and confirm `npm run build` fails with a type error naming `role`, and restore it.
-- [ ] **Step 6: Commit** `git commit -m "feat: add typed profile data as single content source"`
+- [ ] **Step 6: Commit** `git commit -m "feature: add typed profile data as single content source"`
 
 ---
 
@@ -175,16 +176,16 @@ export type Profile = {
   - `useInView<T extends Element>(options?: { once?: boolean; rootMargin?: string }): { ref: React.RefObject<T | null>; inView: boolean }`. Default `once: true`, `rootMargin: '0px 0px -10% 0px'`. Returns `inView = true` immediately (initial state) when `matchMedia('(prefers-reduced-motion: reduce)').matches` or when `typeof IntersectionObserver === 'undefined'`. Disconnects on unmount.
   - `Tile(props: { variant?: 'plain' | 'dark' | 'accent'; label?: string; href?: string; sx?: SxProps<Theme>; children: ReactNode })`. Radius 16 (14 below `md`), padding 16px (22px at `xl`), white with a 1px `line` border. `dark` uses ink bg and bg text with label `darkMuted`. `accent` uses `#059669` bg, white text and label `onAccent`. Hover lift per Global Constraints. When `href` is set it renders as an `<a>`. `label` renders as a small 12px muted line above the children.
   - `SectionLabel(props: { children: ReactNode; id?: string })`: 12px, uppercase, letterSpacing `.12em`, muted, `component="h2"`.
-  - `DrawLine(props: { delayS?: number })`: 2px ink line with `drawLine` animation, margin 40px vertical (28px below `md`). It animates only once `useInView` is true, and before that it's width 0. Under reduced motion it's full width.
+  - `DrawLine(props: { delaySeconds?: number })`: 2px ink line with `drawLine` animation, margin 40px vertical (28px below `md`). It animates only once `useInView` is true, and before that it's width 0. Under reduced motion it's full width.
   - `UnderlineLink(props: { href: string; children: ReactNode; onClick?: () => void })`: weight 600, ink color, accent 2px underline scaling 0→1 from the left in 0.3s on hover and `:focus-visible`.
   - `TechChips(props: { items: string[] })`: wrapping row, gap 6px. Each item is an 11px pill with a 1px `line` border and `chipText` color (MUI `Chip`, `variant="outlined"`, `size="small"`, restyled).
-  - `Reveal(props: { delayS?: number; children: ReactNode; sx?: SxProps<Theme> })`: starts `opacity: 0; transform: translateY(14px)` and runs `fadeUp` with `animationDelay` once `inView`. **Under reduced motion it renders fully visible with no transform.** This pins Review Focus #1.
+  - `Reveal(props: { delaySeconds?: number; children: ReactNode; sx?: SxProps<Theme> })`: starts `opacity: 0; transform: translateY(14px)` and runs `fadeUp` with `animationDelay` once `inView`. **Under reduced motion it renders fully visible with no transform.** This pins Review Focus #1.
 
 - [ ] **Step 1: Lesson (a)**, then write `Tile`, `SectionLabel`, `UnderlineLink`, `TechChips` and walk through them.
 - [ ] **Step 2: Lesson (b)**, then write `useInView`, `Reveal`, `DrawLine` and walk through them.
 - [ ] **Step 3: Temporarily render** in `HomePage` one of each Tile variant, a `TechChips`, an `UnderlineLink`, and a `DrawLine` placed below a 150vh spacer.
 - [ ] **Step 4: Verify.** Lint and build pass. In the browser, the tiles match the mockup's tile, dark and accent looks. Hover lifts the tiles with a mouse, and in device mode (touch) nothing sticks. The `DrawLine` below the spacer draws only when scrolled to. With reduced motion emulated and a reload, everything is visible and still, and the line is full width without scrolling animation.
-- [ ] **Step 5: Remove the temporary demo** and **commit** `git commit -m "feat: add shared tile, link, chip, divider and scroll-reveal pieces"`
+- [ ] **Step 5: Remove the temporary demo** and **commit** `git commit -m "feature: add shared tile, link, chip, divider and scroll-reveal pieces"`
 
 ---
 
@@ -204,7 +205,7 @@ export type Profile = {
 - [ ] **Step 2: Write `Header`.** Left: `profile.name` at 16px weight 700, letterSpacing `-.01em`. Right, at `md` and up: one `UnderlineLink` per `nav.sectionIds`, with `href="#<id>"` and text `sections[id].title`, gap 22px (14px at `md`). Below `md`: a pill button with `nav.menuLabel` + "☰" (1px `line` border, tile bg) that opens an MUI `Drawer` (`anchor="top"`) listing the same links. Choosing a link closes it, and Escape or backdrop closes it (Drawer default). The Drawer paper gets bg `#fafaf9` and no shadow. Bottom margin 56px (`lg`+), 44px (`md`), 36px (below `md`), 88px (`xl`). Wrapped in `Reveal`.
 - [ ] **Step 3: Walk through.**
 - [ ] **Step 4: Verify.** Lint and build pass. At 1280 the three links show with a sliding underline on hover. At 375 the Menu button shows. Open it, tap "Contact", and the drawer closes. At 375, Tab to the Menu button, press Enter, Tab through the links, and Escape closes it, with focus outlines visible throughout. (Section targets arrive later, so the URL hash changing is enough for now. Task 9 re-checks landing.)
-- [ ] **Step 5: Commit** `git commit -m "feat: add header with responsive nav and mobile menu"`
+- [ ] **Step 5: Commit** `git commit -m "feature: add header with responsive nav and mobile menu"`
 
 ---
 
@@ -221,10 +222,10 @@ export type Profile = {
 - Produces: `Hero()` with no props.
 
 - [ ] **Step 1: Lesson.**
-- [ ] **Step 2: Write `Hero`.** An `h1` (theme `h1` variant) reading `{before} <rotator/>` `<br/>` `{after}`. The rotator is an inline-block, `height: 1.08em`, `overflow: hidden`, `verticalAlign: bottom`, containing a block whose children are the three `rotatingWords` mapped to `display: block; line-height: 1.08em`, in accent color, animated with `rotateWord 7.5s infinite`. Mark the visual rotator `aria-hidden` and add a visually-hidden span with the three words joined by ", " so screen readers read the sentence once. Sub-line: `name · title · stack.join(' & ') · location`, muted, 16px (15px below `md`, 18px at `xl`), margin-top 18px. Then `<DrawLine />`. Stagger with `Reveal delayS` 0.2 and 0.35.
+- [ ] **Step 2: Write `Hero`.** An `h1` (theme `h1` variant) reading `{before} <rotator/>` `<br/>` `{after}`. The rotator is an inline-block, `height: 1.08em`, `overflow: hidden`, `verticalAlign: bottom`, containing a block whose children are the three `rotatingWords` mapped to `display: block; line-height: 1.08em`, in accent color, animated with `rotateWord 7.5s infinite`. Mark the visual rotator `aria-hidden` and add a visually-hidden span with the three words joined by ", " so screen readers read the sentence once. Sub-line: `name · title · stack.join(' & ') · location`, muted, 16px (15px below `md`, 18px at `xl`), margin-top 18px. Then `<DrawLine />`. Stagger with `Reveal delaySeconds` 0.2 and 0.35.
 - [ ] **Step 3: Walk through.**
 - [ ] **Step 4: Verify.** Lint and build pass. The word cycles secure → scalable → real-time with no clipping of descenders at 320, 375, 1280 and 1680. The headline never overflows at 320. With reduced motion, "secure" is shown and still.
-- [ ] **Step 5: Commit** `git commit -m "feat: add hero headline with rotating word"`
+- [ ] **Step 5: Commit** `git commit -m "feature: add hero headline with rotating word"`
 
 ---
 
@@ -241,10 +242,10 @@ export type Profile = {
 - Produces: `Highlights()` with no props.
 
 - [ ] **Step 1: Lesson.**
-- [ ] **Step 2: Write `Highlights`.** A CSS grid with columns `xs: 1, sm: 2, md: 2, lg: 4` (repeat 1fr), gap 12px (10px below `md`, 16px at `xl`), and `gridAutoRows: minmax(96px, auto)` (84px below `md`, 120px at `xl`). Tiles in order: About (`dark`, spanning `1 / -1` below `lg`, and 2 columns × 2 rows at `lg`+, with text at 18px weight 600 lineHeight 1.4, 16px below `md`, 22px at `xl`), Status (shown only if `status.show`, with a 8px `#16a34a` dot running `pulse`), CV (`accent`, `href={cvHref}`, `download`, text 19px weight 800), Now at, Lately. Each is wrapped in `Reveal` with stagger 0.35, 0.5, 0.5, 0.65, 0.65. Then `<DrawLine delayS={1.1} />`.
+- [ ] **Step 2: Write `Highlights`.** A CSS grid with columns `xs: 1, sm: 2, md: 2, lg: 4` (repeat 1fr), gap 12px (10px below `md`, 16px at `xl`), and `gridAutoRows: minmax(96px, auto)` (84px below `md`, 120px at `xl`). Tiles in order: About (`dark`, spanning `1 / -1` below `lg`, and 2 columns × 2 rows at `lg`+, with text at 18px weight 600 lineHeight 1.4, 16px below `md`, 22px at `xl`), Status (shown only if `status.show`, with a 8px `#16a34a` dot running `pulse`), CV (`accent`, `href={cvHref}`, `download`, text 19px weight 800), Now at, Lately. Each is wrapped in `Reveal` with stagger 0.35, 0.5, 0.5, 0.65, 0.65. Then `<DrawLine delaySeconds={1.1} />`.
 - [ ] **Step 3: Walk through.**
 - [ ] **Step 4: Verify.** Lint and build pass. The layout matches the mockup at 320 (1 column), 375 and 820 (2 columns, About full width) and 1280/1680 (4 columns). The CV tile requests `/cv.pdf`. **Review Focus #3:** temporarily set `status.show: false`, and at 1280 and 375 the grid has no empty holes (it may reflow). Restore it.
-- [ ] **Step 5: Commit** `git commit -m "feat: add highlight tiles"`
+- [ ] **Step 5: Commit** `git commit -m "feature: add highlight tiles"`
 
 ---
 
@@ -265,7 +266,7 @@ export type Profile = {
 - [ ] **Step 3: Write `Experience`.** A `<section id={sections.experience.id}>` with `SectionLabel` showing `sections.experience.title`. Below it a timeline container with `padding-left: 28px` (22px below `md`) and a 2px `line` rail at `left: 7px` (5px below `md`). An accent fill overlay grows with `fillDown 1.8s ease-out` once the container is `inView` (full height under reduced motion). Each job sits in a `Reveal` (stagger 0.15s), with a 12px circle dot (bg-colored fill, 2px accent border) at `left: -27px` (-22px below `md`), top 20px. Then `<DrawLine />`.
 - [ ] **Step 4: Walk through.**
 - [ ] **Step 5: Verify.** Lint and build pass. It matches the mockup at all five widths. The rail fills when scrolled into view, not before. Only Burgan Bank shows "Present" and "Now". **Review Focus #3:** temporarily set ConnectX `end: null`, check that it gets the badge, then restore it.
-- [ ] **Step 6: Commit** `git commit -m "feat: add experience timeline"`
+- [ ] **Step 6: Commit** `git commit -m "feature: add experience timeline"`
 
 ---
 
@@ -287,7 +288,7 @@ export type Profile = {
 - [ ] **Step 4: Write `Education`.** A tile row (grid `xs 1, md 3`): one tile per education entry (label = years, text = school + degree) and one per achievement (label = title, text = detail).
 - [ ] **Step 5: Walk through** all three.
 - [ ] **Step 6: Verify.** Lint and build pass. All three sections show with the same tile, chip and label styling at all five widths, revealing on scroll. Only elraghy.dev shows a "View on GitHub" link, and it opens in a new tab (Review Focus #3).
-- [ ] **Step 7: Commit** `git commit -m "feat: add projects, skills and education sections"`
+- [ ] **Step 7: Commit** `git commit -m "feature: add projects, skills and education sections"`
 
 ---
 
@@ -317,5 +318,5 @@ export type Profile = {
   - **Review Focus #2:** temporarily add a job with company `'International Business Machines Corporation (Middle East)'` and 8 tech chips, plus a 5th project with a 300-character description. At 320 everything wraps with no horizontal scroll. Remove them.
   - Reduced motion on: every section is visible without scrolling animations, the word is frozen, and the lines are full.
   - On a laptop, without scrolling: title, open to work, current employer and CV are all visible (spec goal).
-- [ ] **Step 6: Commit** `git commit -m "feat: add contact footer, page metadata and assemble page"`
+- [ ] **Step 6: Commit** `git commit -m "feature: add contact footer, page metadata and assemble page"`
 - [ ] **Step 7: Push to deploy** only after the owner says so: `git push origin main`, then confirm the Actions run is green and <https://mohamedelraghy.github.io/> shows the site.
